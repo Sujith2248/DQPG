@@ -103,7 +103,7 @@ It is something that we always required.</li>
 </div>
 </div>
 <div class="foot">
-    Made With <img src="Vector.svg"> By CSE Techies Of KIET-W
+<p>&copy; 2025 MyWebsite. All rights reserved.</p>
 </div>
 </body>
 </html>
