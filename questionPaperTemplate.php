@@ -56,19 +56,19 @@ session_start();
 	}
 
 
-	$qtype=$_POST["qtype"];
-	if($qtype=='tbq1word')
-	{
-	$type="One word questions";
-	}
-	else if($qtype=='tbqbrief')
-	{
-	$type="Brief questions";
-    }
-    else
-	{
-	$type="Multiple choice questions";
-	}
+	// $qtype=$_POST["qtype"];
+	// if($qtype=='tbq1word')
+	// {
+	// $type="One word questions";
+	// }
+	// else if($qtype=='tbqbrief')
+	// {
+	// $type="Brief questions";
+    // }
+    // else
+	// {
+	// $type="Multiple choice questions";
+	// }
 
 	$noofquestions=$_POST["noofquestions"];
 	$totmarks=$_POST["totmarks"];
@@ -107,101 +107,101 @@ session_start();
 
 	echo"</tr>";
     $count=0;
-	if ($qtype=="tbq1word")
-	{
-		$result=mysqli_query($conn,"Select * from tbq1word where subid=$subid");
-		echo "</table>";
-		echo"<table border='0' align='center' width='800'>";
-		echo "<tr><td>Answer the $type:</td></tr>";
-        echo "<br>";
-		while($row = mysqli_fetch_assoc($result))
-		{
-            $num = $row['wordid'];
-			if(isset($_REQUEST[$num]))
-			{
-                $count+=1;
-				echo"<tr>";
-				echo"<td>";
-				$val = $_REQUEST[$num];
-                echo "$count. $val";
-				echo"</td>";
-				echo"</tr>";
-			}
-		}
-		echo "</table >";
-	}
-	else if ($qtype=="tbqbrief")
-	{
-		$result=mysqli_query($conn,"Select * from tbqbrief where subid=$subid");
-		echo "</table>";
-		echo"<table border='0' align='center' width='800'>";
-		echo "<tr><td>Answer the $type:</td></tr>";
-        echo "<br>";
-		while($row = mysqli_fetch_assoc($result))
-		{
-            $num = $row['bid'];
-			if(isset($_REQUEST[$num]))
-			{
-                $count+=1;
-				echo"<tr>";
-				echo"<td>";
-				$val = $_REQUEST[$num];
-                echo "$count. $val";
-				echo"</td>";
-				echo"</tr>";
-			}
-		}
-		echo "</table >";
+	// if ($qtype=="tbq1word")
+	// {
+	// 	$result=mysqli_query($conn,"Select * from tbq1word where subid=$subid");
+	// 	echo "</table>";
+	// 	echo"<table border='0' align='center' width='800'>";
+	// 	echo "<tr><td>Answer the $type:</td></tr>";
+    //     echo "<br>";
+	// 	while($row = mysqli_fetch_assoc($result))
+	// 	{
+    //         $num = $row['wordid'];
+	// 		if(isset($_REQUEST[$num]))
+	// 		{
+    //             $count+=1;
+	// 			echo"<tr>";
+	// 			echo"<td>";
+	// 			$val = $_REQUEST[$num];
+    //             echo "$count. $val";
+	// 			echo"</td>";
+	// 			echo"</tr>";
+	// 		}
+	// 	}
+	// 	echo "</table >";
+	// }
+	// else if ($qtype=="tbqbrief")
+	// {
+	// 	$result=mysqli_query($conn,"Select * from tbqbrief where subid=$subid");
+	// 	echo "</table>";
+	// 	echo"<table border='0' align='center' width='800'>";
+	// 	echo "<tr><td>Answer the $type:</td></tr>";
+    //     echo "<br>";
+	// 	while($row = mysqli_fetch_assoc($result))
+	// 	{
+    //         $num = $row['bid'];
+	// 		if(isset($_REQUEST[$num]))
+	// 		{
+    //             $count+=1;
+	// 			echo"<tr>";
+	// 			echo"<td>";
+	// 			$val = $_REQUEST[$num];
+    //             echo "$count. $val";
+	// 			echo"</td>";
+	// 			echo"</tr>";
+	// 		}
+	// 	}
+	// 	echo "</table >";
 
 
-		// $result=mysqli_query($conn,"Select * from tbqbrief where subid=$subid");
-		// echo "</table>";
-		// echo"<table border='0' align='center' width='800'>";
-		// echo "<tr><td>Answer the $type:</td></tr>";
-        // echo "<br>";
-		// while($row = mysqli_fetch_assoc($result))
-		// {
-        //     $num = $row['bid'];
-		// 	if(isset($_REQUEST[$num]))
-		// 	{
-        //         $count+=1;
-		// 		echo"<tr>";
-		// 		$val = $_REQUEST[$num];
-		// 		echo"<td>";
-        //         echo "$count. $val";
-		// 		echo"</td>";
-		// 		echo"<br>";
-		// 		echo"</tr>";
-        //     }
-        // echo "</table >";
-        // }
-    }
-    else
-	{
-		$result=mysqli_query($conn,"Select * from tbqmcq where subid=$subid");
-		echo "</table>";
-		echo"<table border='0' align='center' width='800'>";
-		echo "<tr><td>Answer the $type:</td></tr>";
-        echo "<br>";
-        while($row = mysqli_fetch_assoc($result)){
-            $num = $row['mcqid'];
-			if(isset($_REQUEST[$num]))
-			{
-                $count+=1;
-				echo"<tr>";
-                $val = $_REQUEST[$num];
-                echo"<td>";
-                echo "$count. $val";
-                echo"</td>";
-                echo"<td>";
-                echo "A) ".$row["mcqanswer1"] ."     B) ". $row["mcqanswer2"] ."     C) ". $row["mcqanswer3"] ."     D) ". $row["mcqanswer4"];
-                echo"</td>";
-                echo"</tr>";
-                echo"<br>";
-			}
-		}
-		echo "</table >";
-    }
+	// 	// $result=mysqli_query($conn,"Select * from tbqbrief where subid=$subid");
+	// 	// echo "</table>";
+	// 	// echo"<table border='0' align='center' width='800'>";
+	// 	// echo "<tr><td>Answer the $type:</td></tr>";
+    //     // echo "<br>";
+	// 	// while($row = mysqli_fetch_assoc($result))
+	// 	// {
+    //     //     $num = $row['bid'];
+	// 	// 	if(isset($_REQUEST[$num]))
+	// 	// 	{
+    //     //         $count+=1;
+	// 	// 		echo"<tr>";
+	// 	// 		$val = $_REQUEST[$num];
+	// 	// 		echo"<td>";
+    //     //         echo "$count. $val";
+	// 	// 		echo"</td>";
+	// 	// 		echo"<br>";
+	// 	// 		echo"</tr>";
+    //     //     }
+    //     // echo "</table >";
+    //     // }
+    // }
+    // else
+	// {
+	// 	$result=mysqli_query($conn,"Select * from tbqmcq where subid=$subid");
+	// 	echo "</table>";
+	// 	echo"<table border='0' align='center' width='800'>";
+	// 	echo "<tr><td>Answer the $type:</td></tr>";
+    //     echo "<br>";
+    //     while($row = mysqli_fetch_assoc($result)){
+    //         $num = $row['mcqid'];
+	// 		if(isset($_REQUEST[$num]))
+	// 		{
+    //             $count+=1;
+	// 			echo"<tr>";
+    //             $val = $_REQUEST[$num];
+    //             echo"<td>";
+    //             echo "$count. $val";
+    //             echo"</td>";
+    //             echo"<td>";
+    //             echo "A) ".$row["mcqanswer1"] ."     B) ". $row["mcqanswer2"] ."     C) ". $row["mcqanswer3"] ."     D) ". $row["mcqanswer4"];
+    //             echo"</td>";
+    //             echo"</tr>";
+    //             echo"<br>";
+	// 		}
+	// 	}
+	// 	echo "</table >";
+    // }
 	?>
     <button id="submit" onclick="myFunction()">Print</button>
 	<script>

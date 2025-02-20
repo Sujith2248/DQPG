@@ -16,8 +16,8 @@ session_start();
 <body>
     <div class="container mt-4">
         <h2 class="mb-3">Question Paper Generator</h2>
-		<form action="selectquestionuser.php" method="post">       
- <form id="questionPaperForm" name="login" action="signupscript.php" method="post" class="form" onsubmit="return validateLogin()">
+		<!-- <form action="questionPaperTemplate.php" method="POST">       -->
+ <form id="questionPaperForm" name="login" action="questionPaperTemplate.php" method="post" class="form" onsubmit="return validateLogin()">
             <div class="mb-3">
                 <label for="institution" class="form-label">Institution</label>
                 <select id="institution" class="form-select" required>
@@ -61,24 +61,32 @@ session_start();
                 <label for="examName" class="form-label">Exam Name</label>
                 <input type="text" id="examName" class="form-control" required>
             </div>
-
             <div class="mb-3">
-                <label for="totalMarks" class="form-label">Total Marks</label>
-                <input type="number" id="totalMarks" class="form-control" required min="1">
+                <label for="time" class="form-label">Exam Time</label>
+                <input type="text" name="time" id="time" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="date" class="form-label">Exam Date</label>
+                <input type="text" name="date" id="date" class="form-control" required>
             </div>
 
             <div class="mb-3">
-                <label for="sections" class="form-label">Number of Sections</label>
-                <input type="number" id="sections" class="form-control" required min="1">
+                <label for="totmarks" class="form-label">Total Marks</label>
+                <input type="number" name="totmarks" id="totmarks" class="form-control" required min="1">
+            </div>
+
+            <div class="mb-3">
+                <label for="noofquestions" class="form-label">Number of Sections</label>
+                <input type="number"name="noofquestions" id="noofquestions" class="form-control" required min="1">
             </div>
 
             <div id="sectionsContainer"></div>
 
-            <button type="button" class="btn btn-primary mt-3" id="generateBtn">Generate</button>
+            <button type="submit" class="btn btn-primary mt-3" id="generateBtn">Generate</button>
             <button type="reset" class="btn btn-secondary mt-3">Reset</button>
-			<div class="buttons">
+			<!-- <div class="buttons">
                 <input id="submit" type="submit" value="Select Questions" />
-                </div>
+                </div> -->
 
         </form>
     </div>
@@ -132,7 +140,7 @@ session_start();
             });
 
             // Dynamic section generation
-            $('#sections').change(function () {
+            $('#noofquestions').change(function () {
                 let sectionCount = $(this).val();
                 let sectionHtml = '';
                 for (let i = 1; i <= sectionCount; i++) {
