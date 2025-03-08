@@ -118,27 +118,10 @@ session_start();
  include ('header.php');
 ?> 
 <div class="bottom">
-  <h4>Welcome To Adiministrator Panel</h4>
-  <div class="menubar">
-    <div class="dropdown">
-        <button class="dropbtn">Users</button>
-        <div class="dropdown-content" style="left:0;">
-          <a href ="users.php">Show Users</a>
-          <a href="delusers.php">Delete users</a>
-        </div>
-    </div>
-    <div class="dropdown">
-      <button class="dropbtn">Papers</button>
-      <div class="dropdown-content" style="left:0;">
-        <a href ="add1word.php">Add new short question</a>
-        <a href ="addbrief.php">Add new brief question</a>
-        <a href ="addmcq.php">Add new MCQ</a>
-      </div>
-    </div>
-  </div>
+  <h4>All Users Panel</h4>
   <hr>
   <?php
-	echo "<h2>List of current users..</h2>";
+	echo "<h2>List of All users..</h2>";
 	include ('connection.php');
 
 	$result = mysqli_query($conn, "SELECT id first_name, last_name, phone_number, email, role, address, gender, status FROM users");

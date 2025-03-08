@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Sign up page</title>
+        <title>Register user</title>
     
         <style type="text/css">
             .bottom {
@@ -107,7 +107,7 @@
         </style>
 
         <script>
-            function validateLogin() {
+            function validateForm() {
                 let fname = document.forms["login"]["Fname"].value.trim();
                 let lname = document.forms["login"]["Lname"].value.trim();
                 let contact = document.forms["login"]["contact"].value.trim();
@@ -155,9 +155,9 @@
     </head>
     <body>
         <div class="bottom">
-            <h1>SIGNUP HERE!</h1>    
+            <h1>Register New User</h1>    
             <div class="box">
-                <form name="login" action="signupscript.php" method="post" class="form" onsubmit="return validateLogin()">
+                <form name="login" action="signupscript.php" method="post" class="form" onsubmit="return validateForm()">
                     <input type="text" name="Fname" placeholder="First Name"><br>
                     <input type="text" name="Lname" placeholder="Last Name"><br>
                     <input type="text" name="contact" placeholder="Contact Number"><br>

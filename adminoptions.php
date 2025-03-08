@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?php
-session_start();
+// session_start();
 ?>
 <html>
 <head>
@@ -95,8 +95,22 @@ session_start();
     <div class="dropdown">
         <button class="dropbtn">Users</button>
         <div class="dropdown-content" style="left:0;">
-          <a href ="users.php">Show Users</a>
-          <!-- <a href="delusers.php">Delete users</a> -->
+          <a href ="users.php">All Users</a>
+          <a href="Signup.php">Add New User</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">Institutes</button>
+        <div class="dropdown-content" style="left:0;">
+          <a href ="users.php">All Institutions</a>
+          <a href="delusers.php">Add New Institute</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">Departments</button>
+        <div class="dropdown-content" style="left:0;">
+          <a href ="users.php">All Departments</a>
+          <a href="delusers.php">Add New Departments</a>
         </div>
     </div>
     <div class="dropdown">
