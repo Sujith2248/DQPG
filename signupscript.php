@@ -43,14 +43,11 @@
  $Fname=$_POST["Fname"];
  $Lname=$_POST["Lname"];
  $contact=$_POST["contact"];
- $collg=$_POST["collg"];
- $board=$_POST["board"];
  $email=$_POST["email"];
  $passwd=$_POST["password"];
  $address=$_POST["address"];
- $country=$_POST["country"];
- $desc=$_POST["desc"];
- $type=$_POST["type"];
+ $type=$_POST["role"];
+ $gender=$_POST["gender"];
  
  // $query="SELECT uid FROM tbuser";
  // $result = mysql_query($query,$conn);
@@ -61,7 +58,10 @@
   // }
   // $uidvar=$uidvar+1;
  
- $query="INSERT INTO tbuser VALUES('$Fname','$Lname','$contact','$collg','$board','$email','$passwd','$address','$country','$desc','$type')";
+  $query = "INSERT INTO users (first_name, last_name, email, phone_number, password, role, address, gender) 
+          VALUES ('$Fname', '$Lname', '$email', '$contact', '$passwd', '$type', '$address', '$gender')";
+          // print_r($query);
+          // exit(1);
  if (mysqli_query($conn,$query))
  {
  echo "<p class='p'>Congrats "."$Fname"." "."$Lname"."  Now you are the registred user..!!</p>";
