@@ -16,11 +16,10 @@ session_start();
 <body>
     <div class="container mt-4">
         <h2 class="mb-3">Question Paper Generator</h2>
-		<!-- <form action="questionPaperTemplate.php" method="POST">       -->
- <form id="questionPaperForm" name="login" action="questionPaperTemplate.php" method="post" class="form" onsubmit="return validateLogin()">
+        <form id="questionPaperForm" name="login" action="questionPaperTemplate.php" method="post" class="form">
             <div class="mb-3">
                 <label for="institution" class="form-label">Institution</label>
-                <select id="institution" class="form-select" required>
+                <select id="institution" name="institution" class="form-select" required>
                     <option value="">Select Institution</option>
                     <option value="TEC">TEC</option>
                     <option value="NSS">NSS</option>
@@ -29,37 +28,37 @@ session_start();
 
             <div class="mb-3">
                 <label for="department" class="form-label">Department</label>
-                <select id="department" class="form-select" required>
-				<option value="">Select Department</option>
+                <select id="department" name="department" class="form-select" required>
+                    <option value="">Select Department</option>
                     <option value="BSc">B Sc</option>
                     <option value="BA">BA</option>
-					<option value="BCom">BCom</option>
-				</select>
+                    <option value="BCom">BCom</option>
+                </select>
             </div>
 
             <div class="mb-3">
                 <label for="semester" class="form-label">Semester</label>
-                <select id="semester" class="form-select" required>
-				<option value="sem1">sem1</option>
+                <select id="semester" name="semester" class="form-select" required>
+                    <option value="sem1">sem1</option>
                     <option value="sem2">sem2</option>
-					<option value="sem3">sem3</option>
-					<option value="sem4">sem4</option>
-				</select>
+                    <option value="sem3">sem3</option>
+                    <option value="sem4">sem4</option>
+                </select>
             </div>
 
             <div class="mb-3">
                 <label for="subject" class="form-label">Subject</label>
-                <select id="subject" class="form-select" required>
-				<option value="java">java</option>
-                    <option value="html">html</option>
-					<option value="english">english</option>
-					<option value="dbms">dbms</option>
-				</select>
+                <select id="subject" name="subject" class="form-select" required>
+                    <option value="java">Java</option>
+                    <option value="html">HTML</option>
+                    <option value="english">English</option>
+                    <option value="dbms">DBMS</option>
+                </select>
             </div>
 
             <div class="mb-3">
                 <label for="examName" class="form-label">Exam Name</label>
-                <input type="text" id="examName" class="form-control" required>
+                <input type="text" id="examName" name="examName" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label for="time" class="form-label">Exam Time</label>
@@ -76,71 +75,20 @@ session_start();
             </div>
 
             <div class="mb-3">
-                <label for="noofquestions" class="form-label">Number of Sections</label>
-                <input type="number"name="noofquestions" id="noofquestions" class="form-control" required min="1">
+                <label for="noofsections" class="form-label">Number of Sections</label>
+                <input type="number" name="noofsections" id="noofsections" class="form-control" required min="1">
             </div>
 
             <div id="sectionsContainer"></div>
 
             <button type="submit" class="btn btn-primary mt-3" id="generateBtn">Generate</button>
             <button type="reset" class="btn btn-secondary mt-3">Reset</button>
-			<!-- <div class="buttons">
-                <input id="submit" type="submit" value="Select Questions" />
-                </div> -->
-
         </form>
     </div>
 
     <script>
         $(document).ready(function () {
-            $('#institution').change(function () {
-                let institutionId = $(this).val();
-                if (institutionId) {
-                    // AJAX to load departments based on selected institution
-                    $.ajax({
-                        url: 'generator.class.php',
-                        type: 'POST',
-                        data: { type: 'departments', institutionId: institutionId },
-                        success: function (data) {
-                            $('#department').html(data).prop('disabled', false);
-                        }
-                    });
-                }
-            });
-
-            $('#department').change(function () {
-                let department = $(this).val();
-                let institutionId = $('#institution').val();
-                if (department) {
-                    // AJAX to load semesters based on department
-                    $.ajax({
-                        url: 'generator.class.php',
-                        type: 'POST',
-                        data: { type: 'semesters', institutionId: institutionId },
-                        success: function (data) {
-                            $('#semester').html(data).prop('disabled', false);
-                        }
-                    });
-                }
-            });
-
-            $('#semester').change(function () {
-                let department = $('#department').val();
-                if (department) {
-                    // AJAX to load subjects based on selected department
-                    $.ajax({
-                        url: 'generator.class.php',
-                        type: 'POST',
-                        data: { type: 'subjects', department: department },
-                        success: function (data) {
-                            $('#subject').html(data).prop('disabled', false);
-                        }
-                    });
-                }
-            });
-
-            // Dynamic section generation
-            $('#noofquestions').change(function () {
+            $('#noofsections').change(function () {
                 let sectionCount = $(this).val();
                 let sectionHtml = '';
                 for (let i = 1; i <= sectionCount; i++) {
@@ -162,7 +110,7 @@ session_start();
                                         <option value="random">Random</option>
                                     </select>
                                     <div class="manual-selection d-none" id="manualSelection${i}">
-                                        <label>Select Questions</label>
+                                        <label>Enter Questions</label>
                                         <div class="question-options" id="questionOptions${i}"></div>
                                     </div>
                                     <div class="random-selection d-none" id="randomSelection${i}">
@@ -177,12 +125,47 @@ session_start();
                 $('#sectionsContainer').html(sectionHtml);
             });
 
-            // Handle generate button click
+            // Handle dynamic question input field generation
+            $(document).on("input", ".question-count", function () {
+                let sectionNumber = $(this).data("section");
+                let questionCount = $(this).val();
+                let questionContainer = $("#questionOptions" + sectionNumber);
+
+                // Clear previous inputs
+                questionContainer.html("");
+
+                // Generate new input fields
+                for (let i = 1; i <= questionCount; i++) {
+                    questionContainer.append(`
+                        <div class="mb-2">
+                            <label>Question ${i}</label>
+                            <input type="text" name="section${sectionNumber}_question${i}" class="form-control" required>
+                        </div>
+                    `);
+                }
+
+                // Show manual selection div if there are questions
+                $("#manualSelection" + sectionNumber).removeClass("d-none");
+            });
+
+            // Handle Question Selection dropdown change
+            $(document).on("change", ".question-method", function () {
+                let sectionNumber = $(this).data("section");
+                let method = $(this).val();
+
+                if (method === "manual") {
+                    $("#manualSelection" + sectionNumber).removeClass("d-none");
+                    $("#randomSelection" + sectionNumber).addClass("d-none");
+                } else {
+                    $("#manualSelection" + sectionNumber).addClass("d-none");
+                    $("#randomSelection" + sectionNumber).removeClass("d-none");
+                }
+            });
+
+            // Handle Generate button
             $('#generateBtn').click(function () {
-                // Form validation before generation
                 if ($('#questionPaperForm')[0].checkValidity()) {
                     alert('Form is valid! Generating question paper...');
-                    // Implement the paper generation logic here
                 } else {
                     alert('Please fill out all required fields.');
                 }

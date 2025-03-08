@@ -112,15 +112,13 @@
         <div class="box">
             <form name="login" action="signupscript.php" method="post" class="form" onsubmit="return validateLogin()">
                 <input type="text" name="Fname" placeholder="First Name"><br>
-                <input type="text" name="Lname" placeholder="Last Name"><br>
+                
                 <input type="text" name="contact" placeholder="Contact Number"><br>
-                <input type="text" name="collg" placeholder="College Name"><br>
-                <input type="text" name="board" placeholder="Board/university Name:"><br>
+                
                 <input type="text" name="email" placeholder="Email"><br>
                 <input type="password" name="password" placeholder="Password"><br>
-                <textarea id="input2" rows="4" cols="100" name="address" placeholder="Address ..."></textarea><br>
-                <input type="text" name="country" placeholder="Country"><br>
-                <input type="text" name="desc" placeholder="Description"><br>
+                
+                
                 <div class="radio"><input value="student" type="radio" name="type" />Student&nbsp;
                 <input value="teacher" type="radio" name="type"/>Teacher</div><br>
             
