@@ -96,7 +96,7 @@ session_start();
         <button class="dropbtn">Users</button>
         <div class="dropdown-content" style="left:0;">
           <a href ="users.php">Show Users</a>
-          <a href="delusers.php">Delete users</a>
+          <!-- <a href="delusers.php">Delete users</a> -->
         </div>
     </div>
     <div class="dropdown">

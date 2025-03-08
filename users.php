@@ -141,32 +141,43 @@ session_start();
 	echo "<h2>List of current users..</h2>";
 	include ('connection.php');
 
-	$result=mysqli_query($conn ,"Select * from tbuser");
-	$rows = mysqli_num_rows($result);
-	echo "<table id='customers'>
-			<tr> 
-				<th>First name</th> 
-				<th>Last name</th> 
-				<th>Contact</th>
-				<th>College</th>
-				<th>Board</th>
-				<th>Email</th>
-				<th>Password</th>
-				<th>Address</th>
-				<th>Country</th>
-				<th>Description</th>
-				<th>Type</th>
-			</tr>";
-	
-	for ($j = 0 ; $j < $rows ; ++$j)
-		{
-			$row = mysqli_fetch_row($result); 
-			echo "<tr>";   
-			for ($k = 0 ; $k < 11 ; ++$k) 
-			echo "<td>$row[$k]</td>"; 
-			echo "</tr>"; 
-		}
-	echo "</table>"; 
+	$result = mysqli_query($conn, "SELECT id first_name, last_name, phone_number, email, role, address, gender, status FROM users");
+
+if (!$result) {
+    die("Query failed: " . mysqli_error($conn));
+}
+
+echo "<table id='customers' border='1' cellspacing='0' cellpadding='10'>
+        <tr> 
+            <th>First Name</th> 
+            <th>Last Name</th> 
+            <th>Contact</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Address</th>
+            <th>Gender</th>
+            <th>Status</th>
+            <th>Options</th>
+        </tr>";
+
+while ($row = mysqli_fetch_assoc($result)) {
+    echo "<tr>
+            <td>{$row['first_name']}</td>
+            <td>{$row['last_name']}</td>
+            <td>{$row['phone_number']}</td>
+            <td>{$row['email']}</td>
+            <td>{$row['role']}</td>
+            <td>{$row['address']}</td>
+            <td>{$row['gender']}</td>
+            <td>" . ($row['status'] ? 'Active' : 'Inactive') . "</td>
+             <td>
+                <a href='' style='color: blue; text-decoration: none;'>Edit</a> | 
+                <a href='' style='color: red; text-decoration: none;' onclick='return confirm(\"Are you sure you want to delete this user?\");'>Delete</a>
+            </td>
+          </tr>";
+}
+
+echo "</table>";
 	
   ?>
 </div>
