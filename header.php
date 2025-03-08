@@ -70,7 +70,7 @@
    <?php
     if(isset($_SESSION['currentuser']))
 	{
-    if($_SESSION['currentuser']=="masteradmin@example.com")
+    if($_SESSION['currentuser']=="master_admin")
 	{
     echo "<div><li> <a href='adminoptions.php'>ADMIN OPTIONS</a></li></div>";
     echo "<div><li> <a href='addpaperuser.php'>CREATE PAPER</a></li></div>";

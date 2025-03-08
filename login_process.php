@@ -1,4 +1,6 @@
 <?php
+include ('header.php');
+include ('connection.php');
 session_start();
 ?>
 <html>
@@ -9,19 +11,22 @@ session_start();
 /* @var $_POST type */
 $email = $_POST['email'];
 $password = $_POST['password'];
-include ('header.php');
-include ('connection.php');
-$select = "select ufname from tbuser where uemail like '$email' AND upasswd like '$password'";
+// print_r($password );
+$select = "SELECT email, role FROM users WHERE email= '$email' AND password ='$password' ";
+// print_r($select);
+// exit(1)
 $queryresult = mysqli_query($conn ,$select);
-$name = mysqli_fetch_array($queryresult);
+$result = mysqli_fetch_array($queryresult);
+// print($result["role"] );
+// exit(1);
 // echo "Data: $name";
-if($name=="")
+if($result < 0)
 {
 Header("Location: login.php");
 }
 else
 {
-$_SESSION["currentuser"]=$email;
+$_SESSION["currentuser"]=$result["role"];
 Header("Location: index.php");
 echo "Welcome "." $queryresult";
 }
