@@ -57,6 +57,16 @@
   // $uidvar= $row['uid'] ;
   // }
   // $uidvar=$uidvar+1;
+  $check_email = "SELECT email FROM users WHERE email = '$email'";
+  print_r( $check_email);
+  $result = mysqli_query($conn, $check_email);
+  $num = mysqli_fetch_assoc($result);
+  print_r( $num );
+  // exit(1);
+  if ($num > 0){
+    echo "<p class='p'>Sign up failed "."$email"."  is exist try new email..!!</p>";
+    exit(1);
+  }
  
   $query = "INSERT INTO users (first_name, last_name, email, phone_number, password, role, address, gender) 
           VALUES ('$Fname', '$Lname', '$email', '$contact', '$passwd', '$type', '$address', '$gender')";

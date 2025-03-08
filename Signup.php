@@ -148,7 +148,7 @@
             }
             
             window.onload = function() {
-                document.querySelector('input[value="teacher"]').checked = true;
+                document.querySelector('input[value="faculty"]').checked = true;
                 document.querySelector('input[value="male"]').checked = true;
             };
         </script>
@@ -173,7 +173,7 @@
                     <div class="radio">
                     <label for="">Role</label>
                         <input value="student" type="radio" name="role" />Student&nbsp;
-                        <input value="teacher" type="radio" name="role"/>Teacher
+                        <input value="faculty" type="radio" name="role"/>Teacher
                     </div><br>
                 
                     <div class="buttons">
