@@ -119,21 +119,21 @@
       <div class="dropdown">
         <button class="dropbtn">Departments</button>
         <div class="dropdown-content" style="left:0;">
-          <a href="users.php">All Departments</a>
+          <a href="departments.php">All Departments</a>
           <a href="delusers.php">Add New Departments</a>
         </div>
       </div>
       <div class="dropdown">
         <button class="dropbtn">Subject</button>
         <div class="dropdown-content" style="left:0;">
-          <a href="users.php">All Subjects</a>
+          <a href="allSubjects.php">All Subjects</a>
           <a href="delusers.php">Add New Subject</a>
         </div>
       </div>
       <div class="dropdown">
         <button class="dropbtn">Questions</button>
         <div class="dropdown-content" style="left:0;">
-          <a href="add1word.php">View all questions</a>
+          <a href="allQuestions.php">View all questions</a>
           <a href="addbrief.php">Add new question</a>
         </div>
       </div>
