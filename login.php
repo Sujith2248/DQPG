@@ -96,7 +96,8 @@
                 <input type="text" name="email" placeholder="Email"><br>
                 <input type="password" name="password" placeholder="Password"><br>
                 <input  type="submit" value="Login" class="login"><br>
-                <a href="contactadmin.php">Forgot Password</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="Signup.php">New User</a>
+                <a href="contactadmin.php">Forgot Password</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <!-- <a href="Signup.php">New User</a> -->
             </form>
         </div>
 	</div>  
