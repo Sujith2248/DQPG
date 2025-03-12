@@ -127,14 +127,14 @@
         <button class="dropbtn">Subject</button>
         <div class="dropdown-content" style="left:0;">
           <a href="allSubjects.php">All Subjects</a>
-          <a href="delusers.php">Add New Subject</a>
+          <a href="subject.php">Add New Subject</a>
         </div>
       </div>
       <div class="dropdown">
         <button class="dropbtn">Questions</button>
         <div class="dropdown-content" style="left:0;">
           <a href="allQuestions.php">View all questions</a>
-          <a href="addbrief.php">Add new question</a>
+          <a href="question.php">Add new question</a>
         </div>
       </div>
     </div>
