@@ -124,7 +124,7 @@ session_start();
 	echo "<h2>List of All users..</h2>";
 	include ('connection.php');
 
-	$result = mysqli_query($conn, "SELECT id first_name, last_name, phone_number, email, role, address, gender, status FROM users");
+	$result = mysqli_query($conn, "SELECT id, first_name, last_name, phone_number, email, role, address, gender, status FROM users");
 
 if (!$result) {
     die("Query failed: " . mysqli_error($conn));
@@ -145,14 +145,14 @@ echo "<table id='customers' border='1' cellspacing='0' cellpadding='10'>
 
 while ($row = mysqli_fetch_assoc($result)) {
     echo "<tr>
-            <td>{$row['first_name']}</td>
-            <td>{$row['last_name']}</td>
-            <td>{$row['phone_number']}</td>
-            <td>{$row['email']}</td>
-            <td>{$row['role']}</td>
-            <td>{$row['address']}</td>
-            <td>{$row['gender']}</td>
-            <td>" . ($row['status'] ? 'Active' : 'Inactive') . "</td>
+             <td>" . (!empty($row['first_name']) ? $row['first_name'] : '') . "</td>
+              <td>" . (!empty($row['last_name']) ? $row['last_name'] : '') . "</td>
+              <td>" . (!empty($row['phone_number']) ? $row['phone_number'] : '') . "</td>
+              <td>" . (!empty($row['email']) ? $row['email'] : '') . "</td>
+              <td>" . (!empty($row['role']) ? $row['role'] : '') . "</td>
+              <td>" . (!empty($row['address']) ? $row['address'] : '') . "</td>
+              <td>" . (!empty($row['gender']) ? $row['gender'] : '') . "</td>
+              <td>" . (!empty($row['status']) ? 'Active' : 'Inactive') . "</td>
              <td>
                 <a href='' style='color: blue; text-decoration: none;'>Edit</a> | 
                 <a href='' style='color: red; text-decoration: none;' onclick='return confirm(\"Are you sure you want to delete this user?\");'>Delete</a>
