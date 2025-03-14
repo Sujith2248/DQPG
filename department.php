@@ -45,7 +45,7 @@ include('connection.php');
         }
 
         input[type=text],
-        input[type=password], 
+        input[type=password],
         select {
             width: 70%;
             padding: 12px 20px;
@@ -135,11 +135,6 @@ include('connection.php');
             }
             return true;
         }
-
-        window.onload = function() {
-            document.querySelector('input[value="faculty"]').checked = true;
-            document.querySelector('input[value="male"]').checked = true;
-        };
     </script>
 </head>
 
@@ -147,19 +142,24 @@ include('connection.php');
     <div class="bottom">
         <h1>Department</h1>
         <div class="box">
-            <form name="login" action="signupscript.php" method="post" class="form" onsubmit="return validateForm()">
-                <select name="Fname">
+            <form name="department" action="departmentScript.php" method="post" class="form">
+                <select name="insId">
                     <option value="">Select instituion</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
+                    <option value="1">A</option>
+                    <option value="2">B</option>
+                    <option value="3">C</option>
                 </select><br>
-                <input type="text" name="Lname" placeholder="Name"><br>
-                <input type="text" name="contact" placeholder="Department code"><br>
-                <input type="text" name="email" placeholder="Description"><br>
-                </div><br>
+                <input type="text" name="depName" placeholder="Name"><br>
+                <input type="text" name="depCode" placeholder="Department code"><br>
+                <input type="text" name="depDescription" placeholder="Description"><br>
+
+                <div class="buttons">
+                    <input id="submit" type="submit" value="Submit" />
+                    <input id="reset" type="reset" value="Reset" />
+                </div>
             </form>
-        </div>
+        </div><br>
+    </div>
     </div>
     <div class="foot">
         Made With <img src="Vector.svg"> By CSE Techies Of KIET-W
