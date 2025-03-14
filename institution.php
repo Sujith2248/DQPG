@@ -6,7 +6,7 @@ include('connection.php');
 <html>
 
 <head>
-    <title>Register user</title>
+    <title>Register Institution</title>
 
     <style type="text/css">
         .bottom {
@@ -129,49 +129,26 @@ include('connection.php');
 
     <script>
         function validateForm() {
-            let fname = document.forms["login"]["Fname"].value.trim();
-            let lname = document.forms["login"]["Lname"].value.trim();
-            let contact = document.forms["login"]["contact"].value.trim();
-            let email = document.forms["login"]["email"].value.trim();
-            let password = document.forms["login"]["password"].value.trim();
-            let address = document.forms["login"]["address"].value.trim();
-            let role = document.querySelector('input[name="role"]:checked');
+            let insName = document.forms["institution"]["insName"].value.trim();
+            let insAddress = document.forms["institution"]["insAddress"].value.trim();
+            let insContact = document.forms["institution"]["insContact"].value.trim();
 
-            if (fname === "") {
-                alert("First Name is required");
+            if (insName === "") {
+                alert("Institution Name is required");
                 return false;
             }
-            if (lname === "") {
-                alert("Last Name is required");
-                return false;
-            }
-            if (contact === "" || !/^[0-9]{10}$/.test(contact)) {
+
+            if (insContact === "" || !/^[0-9]{10}$/.test(insContact)) {
                 alert("Enter a valid 10-digit contact number");
                 return false;
             }
-            if (email === "" || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-                alert("Enter a valid email");
-                return false;
-            }
-            if (password === "" || password.length < 6) {
-                alert("Password must be at least 6 characters long");
-                return false;
-            }
-            if (address === "") {
+
+            if (insAddress === "") {
                 alert("Address is required");
                 return false;
             }
-            if (!role) {
-                alert("Please select a role");
-                return false;
-            }
-            return true;
-        }
 
-        window.onload = function() {
-            document.querySelector('input[value="faculty"]').checked = true;
-            document.querySelector('input[value="male"]').checked = true;
-        };
+        }
     </script>
 </head>
 
@@ -179,13 +156,17 @@ include('connection.php');
     <div class="bottom">
         <h1>Institution</h1>
         <div class="box">
-            <form name="login" action="signupscript.php" method="post" class="form" onsubmit="return validateForm()">
-                <input type="text" name="Fname" placeholder="institution name"><br>
-                <input type="text" name="Lname" placeholder="Address"><br>
-                <input type="text" name="contact" placeholder="Contact"><br>
-                </div><br>
+            <form name="institution" action="institutionScript.php" method="post" class="form" onsubmit="return validateForm()">
+                <input type="text" name="insName" placeholder="institution name"><br>
+                <input type="text" name="insAddress" placeholder="Address"><br>
+                <input type="text" name="insContact" placeholder="Contact"><br>
+                <div class="buttons">
+                    <input id="submit" type="submit" value="Submit" />
+                    <input id="reset" type="reset" value="Reset" />
+                </div>
             </form>
-        </div>
+        </div><br>
+    </div>
     </div>
     <div class="foot">
         Made With <img src="Vector.svg"> By CSE Techies Of KIET-W
