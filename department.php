@@ -149,6 +149,12 @@ include('connection.php');
                     <option value="2">B</option>
                     <option value="3">C</option>
                 </select><br>
+                <select name="insId">
+                    <option value="">Select subject</option>
+                    <option value="1">A</option>
+                    <option value="2">B</option>
+                    <option value="3">C</option>
+                </select><br>
                 <input type="text" name="depName" placeholder="Name"><br>
                 <input type="text" name="depCode" placeholder="Department code"><br>
                 <input type="text" name="depDescription" placeholder="Description"><br>

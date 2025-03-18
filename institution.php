@@ -157,6 +157,7 @@ include('connection.php');
         <h1>Institution</h1>
         <div class="box">
             <form name="institution" action="institutionScript.php" method="post" class="form" onsubmit="return validateForm()">
+            <input type="text" name="insName" placeholder="institution code"><br>
                 <input type="text" name="insName" placeholder="institution name"><br>
                 <input type="text" name="insAddress" placeholder="Address"><br>
                 <input type="text" name="insContact" placeholder="Contact"><br>
