@@ -120,7 +120,7 @@
         <button class="dropbtn">Departments</button>
         <div class="dropdown-content" style="left:0;">
           <a href="departments.php">All Departments</a>
-          <a href="department.php">Add New Departments</a>
+          <a href="addOrUpdateDepartment.php">Add New Departments</a>
         </div>
       </div>
       <div class="dropdown">

@@ -142,20 +142,10 @@
         <hr>
         <?php
         echo "<h2>List of All Departments</h2>";
-        include('connection.php');
+        include('department.class.php'); // Include the class file
 
-        // Fetch departments with institution name
-        $result = mysqli_query(
-            $conn,
-            "SELECT d.id, d.name AS department_name, d.department_code, d.description, 
-                i.name AS institution_name 
-         FROM departments d 
-         JOIN institutions i ON d.institution_id = i.id"
-        );
-
-        if (!$result) {
-            die("Query failed: " . mysqli_error($conn));
-        }
+        $department = new Department(); // Create an instance of the class
+        $departments = $department->getAllDepartments(); // Fetch all departments
 
         // Function to handle empty values
         function displayValue($value)
@@ -180,21 +170,25 @@
                 <th>Actions</th>
             </tr>
 
-            <?php while ($row = mysqli_fetch_assoc($result)) : ?>
+            <?php if (!empty($departments)) : ?>
+                <?php foreach ($departments as $row) : ?>
+                    <tr>
+                        <?php foreach ($fields as $field => $label) : ?>
+                            <td><?= displayValue($row[$field]) ?></td>
+                        <?php endforeach; ?>
+                        <td>
+                            <a href="addOrUpdateDepartment.php?id=<?= $row['id'] ?>" style="color: blue; text-decoration: none;">Edit</a> |
+                            <a href="delete_department.php?id=<?= $row['id'] ?>" style="color: red; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this department?');">Delete</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else : ?>
                 <tr>
-                    <?php foreach ($fields as $field => $label) : ?>
-                        <td><?= displayValue($row[$field]) ?></td>
-                    <?php endforeach; ?>
-                    <td>
-                        <a href="edit_department.php?id=<?= $row['id'] ?>" style="color: blue; text-decoration: none;">Edit</a> |
-                        <a href="delete_department.php?id=<?= $row['id'] ?>" style="color: red; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this department?');">Delete</a>
-                    </td>
+                    <td colspan="<?= count($fields) + 1 ?>" style="text-align: center;">No departments found.</td>
                 </tr>
-            <?php endwhile; ?>
+            <?php endif; ?>
         </table>
     </div>
-
-
 
     <div class="foot">
         Made With <img src="Vector.svg"> By CSE Techies Of KIET-W

@@ -7,8 +7,8 @@ USE qpg_appdb;
 -- Create institutions table
 CREATE TABLE IF NOT EXISTS institutions (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    public_id CHAR(36) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
+    code VARCHAR(255) NOT NULL,
     address TEXT NOT NULL,
     contact_number VARCHAR(15),
     status BOOLEAN DEFAULT TRUE,
@@ -19,7 +19,6 @@ CREATE TABLE IF NOT EXISTS institutions (
 -- Create users table
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    public_id CHAR(36),
     institution_id INT,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255),
@@ -38,7 +37,6 @@ CREATE TABLE IF NOT EXISTS users (
 -- Create departments table
 CREATE TABLE IF NOT EXISTS departments (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    public_id CHAR(36) NOT NULL UNIQUE,
     institution_id INT NOT NULL,
     name VARCHAR(255) NOT NULL,
     department_code VARCHAR(255),
@@ -51,7 +49,6 @@ CREATE TABLE IF NOT EXISTS departments (
 -- Create subjects table
 CREATE TABLE IF NOT EXISTS subjects (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    public_id CHAR(36) NOT NULL UNIQUE,
     institution_id INT NOT NULL,
     department_id INT NOT NULL,
     name VARCHAR(255) NOT NULL,
@@ -67,7 +64,6 @@ CREATE TABLE IF NOT EXISTS subjects (
 -- Create questions table
 CREATE TABLE IF NOT EXISTS questions (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    public_id CHAR(36) NOT NULL UNIQUE,
     subject_id INT NOT NULL,
     question_text TEXT NOT NULL,
     marks INT NOT NULL,

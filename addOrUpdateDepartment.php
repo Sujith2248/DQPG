@@ -1,12 +1,61 @@
 <?php
 include('header.php');
-include('connection.php');
+include "department.class.php";
+
+$department = new Department(); // Create an instance of the Department class
+$institutions = $department->getInstitutions(); // Fetch institutions
+
+$departmentData = [
+    "institution_id" => "", // Ensure this matches the DB column name
+    "name" => "",
+    "department_code" => "",
+    "description" => ""
+];
+
+$editMode = false;
+$deptId = isset($_GET['id']) ? $_GET['id'] : null;
+
+// Check if editing an existing department
+if ($deptId) {
+    $editMode = true;
+    $departmentInfo = $department->getDepartmentById($deptId);
+
+    if ($departmentInfo) {
+        $departmentData = array_merge($departmentData, $departmentInfo);
+    } else {
+        die("<script>alert('Department not found!'); window.location='register_department.php';</script>");
+    }
+}
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $data = [
+        "insId" => $_POST["insId"],
+        "depName" => $_POST["depName"],
+        "depCode" => $_POST["depCode"],
+        "depDescription" => $_POST["depDescription"]
+    ];
+
+    if ($editMode) {
+        if ($department->updateDepartment($deptId, $data)) {
+            echo "<script>alert('Department updated successfully!'); window.location='register_department.php';</script>";
+        } else {
+            echo "<script>alert('Failed to update department.');</script>";
+        }
+    } else {
+        if ($department->addDepartment($data)) {
+            echo "<script>alert('Department added successfully!'); window.location='register_department.php';</script>";
+        } else {
+            echo "<script>alert('Failed to add department.');</script>";
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>Register user</title>
+    <title><?= $editMode ? "Edit" : "Add" ?> Department</title>
 
     <style type="text/css">
         .bottom {
@@ -140,27 +189,24 @@ include('connection.php');
 
 <body>
     <div class="bottom">
-        <h1>Department</h1>
+        <h1><?= $editMode ? "Edit" : "Add" ?> Department</h1>
         <div class="box">
-            <form name="department" action="departmentScript.php" method="post" class="form">
-                <select name="insId">
-                    <option value="">Select instituion</option>
-                    <option value="1">A</option>
-                    <option value="2">B</option>
-                    <option value="3">C</option>
+            <form name="department" action="" method="post" class="form">
+                <select name="insId" required>
+                    <option value="">Select Institution</option>
+                    <?php foreach ($institutions as $inst): ?>
+                        <option value="<?= $inst['id'] ?>" <?= $inst['id'] == $departmentData['institution_id'] ? 'selected' : '' ?>>
+                            <?= $inst['name'] ?>
+                        </option>
+                    <?php endforeach; ?>
                 </select><br>
-                <select name="insId">
-                    <option value="">Select subject</option>
-                    <option value="1">A</option>
-                    <option value="2">B</option>
-                    <option value="3">C</option>
-                </select><br>
-                <input type="text" name="depName" placeholder="Name"><br>
-                <input type="text" name="depCode" placeholder="Department code"><br>
-                <input type="text" name="depDescription" placeholder="Description"><br>
+
+                <input type="text" name="depName" placeholder="Department Name" value="<?= htmlspecialchars($departmentData['name']) ?>" required><br>
+                <input type="text" name="depCode" placeholder="Department Code" value="<?= htmlspecialchars($departmentData['department_code']) ?>" required><br>
+                <input type="text" name="depDescription" placeholder="Description" value="<?= htmlspecialchars($departmentData['description']) ?>"><br>
 
                 <div class="buttons">
-                    <input id="submit" type="submit" value="Submit" />
+                    <input id="submit" type="submit" value="<?= $editMode ? "Update" : "Submit" ?>" />
                     <input id="reset" type="reset" value="Reset" />
                 </div>
             </form>
