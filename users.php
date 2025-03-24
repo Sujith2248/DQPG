@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <?php
-// session_start();
+include("users.class.php");
+$user = new User();
+$users = $user->getAllUsers();
 ?>
 <html>
 
@@ -143,22 +145,16 @@
     <?php
     echo "<h2>List of All users..</h2>";
     include('connection.php');
-
-    $result = mysqli_query($conn, "SELECT id, first_name, last_name, phone_number, email, role, address, gender, status FROM users");
-
-    if (!$result) {
-      die("Query failed: " . mysqli_error($conn));
-    }
-
-    // Function to handle empty values
-    function displayValue($value)
-    {
-      return !empty($value) ? htmlspecialchars($value) : '';
-    }
-
-    // Fetch field names dynamically
-    $fields = ['first_name' => 'First Name', 'last_name' => 'Last Name', 'phone_number' => 'Contact', 'email' => 'Email', 'role' => 'Role', 'address' => 'Address', 'gender' => 'Gender', 'status' => 'Status'];
-
+    $fields = [
+      'first_name' => 'First Name',
+      'last_name' => 'Last Name',
+      'phone_number' => 'Contact',
+      'email' => 'Email',
+      'role' => 'Role',
+      'address' => 'Address',
+      'gender' => 'Gender',
+      'status' => 'Status'
+    ];
     ?>
 
     <table id="customers" border="1" cellspacing="0" cellpadding="10">
@@ -169,17 +165,23 @@
         <th>Actions</th>
       </tr>
 
-      <?php while ($row = mysqli_fetch_assoc($result)) : ?>
+      <?php if (!empty($users)) : ?>
+        <?php foreach ($users as $row) : ?>
+          <tr>
+            <?php foreach ($fields as $field => $label) : ?>
+              <td><?= ($field == 'status') ? ($row[$field] ? 'Active' : 'Inactive') : htmlspecialchars($row[$field]) ?></td>
+            <?php endforeach; ?>
+            <td>
+              <a href="Signup.php?id=<?= $row['id'] ?>" style="color: blue; text-decoration: none;">Edit</a> |
+              <a href="delete_user.php?id=<?= $row['id'] ?>" style="color: red; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+      <?php else : ?>
         <tr>
-          <?php foreach ($fields as $field => $label) : ?>
-            <td><?= ($field == 'status') ? ($row[$field] ? 'Active' : 'Inactive') : displayValue($row[$field]) ?></td>
-          <?php endforeach; ?>
-          <td>
-            <a href="" style="color: blue; text-decoration: none;">Edit</a> |
-            <a href="" style="color: red; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
-          </td>
+          <td colspan="<?= count($fields) + 1 ?>" style="text-align: center;">No users found.</td>
         </tr>
-      <?php endwhile; ?>
+      <?php endif; ?>
     </table>
   </div>
 

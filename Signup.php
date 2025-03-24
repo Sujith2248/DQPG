@@ -1,23 +1,55 @@
 ﻿<?php
 include('header.php');
-include('signup.class.php');
+include('users.class.php');
 $user = new User();
+$editMode = false;
+$userData = [
+    "first_name" => "",
+    "last_name" => "",
+    "email" => "",
+    "phone_number" => "",
+    "role" => "student",
+    "address" => "",
+    "gender" => "male"
+];
 
+if (isset($_GET['id'])) {
+    $editMode = true;
+    $userId = $_GET['id'];
+    $existingUser = $user->getUserById($userId);
+
+    if (!$existingUser) {
+        die("<script>alert('User not found!'); window.location='users.php';</script>");
+    }
+
+    $userData = $existingUser;
+}
+
+// Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $data = [
         "first_name" => $_POST["Fname"],
         "last_name" => $_POST["Lname"],
         "email" => $_POST["email"],
         "phone_number" => $_POST["contact"],
-        "password" => $_POST["password"], // Password will be hashed
         "role" => $_POST["role"],
         "address" => $_POST["address"],
         "gender" => $_POST["gender"]
     ];
-    if ($user->addUser($data)) {
-        echo "<script>alert('User added successfully!');</script>";
+
+    if ($editMode) {
+        if ($user->updateUser($userId, $data)) {
+            echo "<script>alert('User updated successfully!'); window.location='users.php';</script>";
+        } else {
+            echo "<script>alert('Failed to update user.');</script>";
+        }
     } else {
-        echo "<script>alert('Failed to add user.');</script>";
+        $data["password"] = $_POST["password"]; // Only add password for new user
+        if ($user->addUser($data)) {
+            echo "<script>alert('User added successfully!'); window.location='users.php';</script>";
+        } else {
+            echo "<script>alert('Failed to add user.');</script>";
+        }
     }
 }
 ?>
@@ -25,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html>
 
 <head>
-    <title>Register user</title>
+    <title><?= $editMode ? "Edit" : "Register" ?> User</title>
 
     <style type="text/css">
         .bottom {
@@ -196,29 +228,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <div class="bottom">
-        <h1>Register New User</h1>
+        <h1><?= $editMode ? "Edit" : "Register" ?> User</h1>
         <div class="box">
             <form name="signup" method="post" class="form" onsubmit="return validateForm()">
-                <input type="text" name="Fname" placeholder="First Name"><br>
-                <input type="text" name="Lname" placeholder="Last Name"><br>
-                <input type="text" name="contact" placeholder="Contact Number"><br>
-                <input type="text" name="email" placeholder="Email"><br>
-                <input type="password" name="password" placeholder="Password"><br>
-                <input type="text" name="address" placeholder="Address"><br>
+                <input type="text" name="Fname" placeholder="First Name" value="<?= htmlspecialchars($userData['first_name']) ?>" required><br>
+                <input type="text" name="Lname" placeholder="Last Name" value="<?= htmlspecialchars($userData['last_name']) ?>"><br>
+                <input type="text" name="contact" placeholder="Contact Number" value="<?= htmlspecialchars($userData['phone_number']) ?>"><br>
+                <input type="text" name="email" placeholder="Email" value="<?= htmlspecialchars($userData['email']) ?>" required><br>
+
+                <?php if (!$editMode) : ?>
+                    <input type="password" name="password" placeholder="Password" required><br>
+                <?php endif; ?>
+
+                <input type="text" name="address" placeholder="Address" value="<?= htmlspecialchars($userData['address']) ?>"><br>
+
                 <div class="radio">
-                    <label for="">Gender</label>
-                    <input value="male" type="radio" name="gender" />Male&nbsp;
-                    <input value="female" type="radio" name="gender" />Female
+                    <label>Gender</label>
+                    <input value="male" type="radio" name="gender" <?= ($userData['gender'] == 'male') ? 'checked' : '' ?> />Male&nbsp;
+                    <input value="female" type="radio" name="gender" <?= ($userData['gender'] == 'female') ? 'checked' : '' ?> />Female
                 </div><br>
 
                 <div class="radio">
-                    <label for="">Role</label>
-                    <input value="student" type="radio" name="role" />Student&nbsp;
-                    <input value="faculty" type="radio" name="role" />Teacher
+                    <label>Role</label>
+                    <input value="student" type="radio" name="role" <?= ($userData['role'] == 'student') ? 'checked' : '' ?> />Student&nbsp;
+                    <input value="faculty" type="radio" name="role" <?= ($userData['role'] == 'faculty') ? 'checked' : '' ?> />Teacher
                 </div><br>
 
                 <div class="buttons">
-                    <input id="submit" type="submit" value="Submit" />
+                    <input id="submit" type="submit" value="<?= $editMode ? "Update" : "Submit" ?>" />
                     <input id="reset" type="reset" value="Reset" />
                 </div>
             </form>

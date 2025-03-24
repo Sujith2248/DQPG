@@ -54,11 +54,11 @@ class User
     // Update an existing user
     public function updateUser($id, $data)
     {
-        $sql = "UPDATE users SET  first_name = ?, last_name = ?, email = ?, phone_number = ?, role = ?, address = ?, gender = ?, status = ? WHERE id = ?";
+        $sql = "UPDATE users SET  first_name = ?, last_name = ?, email = ?, phone_number = ?, role = ?, address = ?, gender = ? WHERE id = ?";
 
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param(
-            "issssssssi",
+            "sssssssi",
             $data["first_name"],
             $data["last_name"],
             $data["email"],
@@ -66,7 +66,6 @@ class User
             $data["role"],
             $data["address"],
             $data["gender"],
-            $data["status"],
             $id
         );
         return $stmt->execute();
