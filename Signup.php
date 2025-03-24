@@ -1,6 +1,25 @@
 ﻿<?php
 include('header.php');
-include('connection.php');
+include('signup.class.php');
+$user = new User();
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $data = [
+        "first_name" => $_POST["Fname"],
+        "last_name" => $_POST["Lname"],
+        "email" => $_POST["email"],
+        "phone_number" => $_POST["contact"],
+        "password" => $_POST["password"], // Password will be hashed
+        "role" => $_POST["role"],
+        "address" => $_POST["address"],
+        "gender" => $_POST["gender"]
+    ];
+    if ($user->addUser($data)) {
+        echo "<script>alert('User added successfully!');</script>";
+    } else {
+        echo "<script>alert('Failed to add user.');</script>";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -179,7 +198,7 @@ include('connection.php');
     <div class="bottom">
         <h1>Register New User</h1>
         <div class="box">
-            <form name="login" action="signupscript.php" method="post" class="form" onsubmit="return validateForm()">
+            <form name="signup" method="post" class="form" onsubmit="return validateForm()">
                 <input type="text" name="Fname" placeholder="First Name"><br>
                 <input type="text" name="Lname" placeholder="Last Name"><br>
                 <input type="text" name="contact" placeholder="Contact Number"><br>
