@@ -3,6 +3,18 @@
 include("users.class.php");
 $user = new User();
 $users = $user->getAllUsers();
+
+// Handle delete request
+if (isset($_GET['delete_id'])) {
+  $userId = $_GET['delete_id'];
+
+  if ($user->deleteUser($userId)) {
+    echo "<script>alert('User deleted successfully!'); window.location='users.php';</script>";
+  } else {
+    echo "<script>alert('Failed to delete user.');</script>";
+  }
+}
+
 ?>
 <html>
 
@@ -173,7 +185,9 @@ $users = $user->getAllUsers();
             <?php endforeach; ?>
             <td>
               <a href="Signup.php?id=<?= $row['id'] ?>" style="color: blue; text-decoration: none;">Edit</a> |
-              <a href="delete_user.php?id=<?= $row['id'] ?>" style="color: red; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
+              <a href="users.php?delete_id=<?= $row['id'] ?>" onclick="return confirm('Are you sure you want to delete this user?');">
+                Delete
+              </a>
             </td>
           </tr>
         <?php endforeach; ?>
