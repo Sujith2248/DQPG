@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <?php
-// session_start();
+include("institutions.class.php");
+$institution = new Institution();
+$institutions = $institution->getAllInstitutions();
+
+// Handle delete request
+if (isset($_GET['delete_id'])) {
+  $institutionId = $_GET['delete_id'];
+
+  if ($institution->deleteInstitution($institutionId)) {
+    echo "<script>alert('Institution deleted successfully!'); window.location='institutions.php';</script>";
+  } else {
+    echo "<script>alert('Failed to delete institution.');</script>";
+  }
+}
+
 ?>
 <html>
 
@@ -141,22 +155,6 @@
     <h4>All Institutions</h4>
     <hr>
     <?php
-    echo "<h2>List of All Institutions</h2>";
-    include('connection.php');
-
-    // Fetch institutions
-    $result = mysqli_query($conn, "SELECT id, name, address, contact_number, status FROM institutions");
-
-    if (!$result) {
-      die("Query failed: " . mysqli_error($conn));
-    }
-
-    // Function to handle empty values
-    function displayValue($value)
-    {
-      return !empty($value) ? htmlspecialchars($value) : '';
-    }
-
     // Define table columns
     $fields = [
       'name' => 'Institution Name',
@@ -174,17 +172,23 @@
         <th>Actions</th>
       </tr>
 
-      <?php while ($row = mysqli_fetch_assoc($result)) : ?>
+      <?php if (!empty($institutions)) : ?>
+        <?php foreach ($institutions as $row) : ?>
+          <tr>
+            <?php foreach ($fields as $field => $label) : ?>
+              <td><?= ($field == 'status') ? ($row[$field] ? 'Active' : 'Inactive') : htmlspecialchars($row[$field]) ?></td>
+            <?php endforeach; ?>
+            <td>
+              <a href="addOrUpdateInstitution.php?id=<?= $row['id'] ?>" style="color: blue; text-decoration: none;">Edit</a> |
+              <a href="institutions.php?delete_id=<?= $row['id'] ?>" style="color: red; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this institution?');">Delete</a>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+      <?php else : ?>
         <tr>
-          <?php foreach ($fields as $field => $label) : ?>
-            <td><?= ($field == 'status') ? ($row[$field] ? 'Active' : 'Inactive') : displayValue($row[$field]) ?></td>
-          <?php endforeach; ?>
-          <td>
-            <a href="edit_institution.php?id=<?= $row['id'] ?>" style="color: blue; text-decoration: none;">Edit</a> |
-            <a href="delete_institution.php?id=<?= $row['id'] ?>" style="color: red; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this institution?');">Delete</a>
-          </td>
+          <td colspan="<?= count($fields) + 1 ?>" style="text-align: center;">No institutions found.</td>
         </tr>
-      <?php endwhile; ?>
+      <?php endif; ?>
     </table>
   </div>
 

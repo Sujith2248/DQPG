@@ -1,12 +1,60 @@
 <?php
 include('header.php');
-include('connection.php');
+include('institutions.class.php');
+
+$institution = new Institution();
+$editMode = false;
+$institutionData = [
+    "name" => "",
+    "code" => "",
+    "address" => "",
+    "contact_number" => "",
+    "status" => 1
+];
+
+// Check if editing an existing institution
+if (isset($_GET['id'])) {
+    $editMode = true;
+    $institutionId = $_GET['id'];
+    $existingInstitution = $institution->getInstitutionById($institutionId);
+
+    if (!$existingInstitution) {
+        die("<script>alert('Institution not found!'); window.location='institutions.php';</script>");
+    }
+
+    $institutionData = $existingInstitution;
+}
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $data = [
+        "name" => $_POST["insName"],
+        "code" => $_POST["insCode"],
+        "address" => $_POST["insAddress"],
+        "contact_number" => $_POST["insContact"]
+    ];
+
+    if ($editMode) {
+        if ($institution->updateInstitution($institutionId, $data)) {
+            echo "<script>alert('Institution updated successfully!'); window.location='institutions.php';</script>";
+        } else {
+            echo "<script>alert('Failed to update institution.');</script>";
+        }
+    } else {
+        if ($institution->addInstitution($data)) {
+            echo "<script>alert('Institution added successfully!'); window.location='institutions.php';</script>";
+        } else {
+            echo "<script>alert('Failed to add institution.');</script>";
+        }
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>Register Institution</title>
+    <title><?= $editMode ? "Edit" : "Register" ?> Institution</title>
 
     <style type="text/css">
         .bottom {
@@ -154,15 +202,16 @@ include('connection.php');
 
 <body>
     <div class="bottom">
-        <h1>Institution</h1>
+        <h1><?= $editMode ? "Edit" : "Register" ?> Institution</h1>
         <div class="box">
-            <form name="institution" action="institutionScript.php" method="post" class="form" onsubmit="return validateForm()">
-            <input type="text" name="insName" placeholder="institution code"><br>
-                <input type="text" name="insName" placeholder="institution name"><br>
-                <input type="text" name="insAddress" placeholder="Address"><br>
-                <input type="text" name="insContact" placeholder="Contact"><br>
+            <form name="institution" method="post" class="form" onsubmit="return validateForm()">
+                <input type="text" name="insCode" placeholder="Institution Code" value="<?= htmlspecialchars($institutionData['code']) ?>" required><br>
+                <input type="text" name="insName" placeholder="Institution Name" value="<?= htmlspecialchars($institutionData['name']) ?>" required><br>
+                <input type="text" name="insAddress" placeholder="Address" value="<?= htmlspecialchars($institutionData['address']) ?>" required><br>
+                <input type="text" name="insContact" placeholder="Contact" value="<?= htmlspecialchars($institutionData['contact_number']) ?>" required><br>
+
                 <div class="buttons">
-                    <input id="submit" type="submit" value="Submit" />
+                    <input id="submit" type="submit" value="<?= $editMode ? "Update" : "Submit" ?>" />
                     <input id="reset" type="reset" value="Reset" />
                 </div>
             </form>

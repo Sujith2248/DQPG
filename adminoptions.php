@@ -113,7 +113,7 @@
         <button class="dropbtn">Institutes</button>
         <div class="dropdown-content" style="left:0;">
           <a href="institutions.php">All Institutions</a>
-          <a href="institution.php">Add New Institute</a>
+          <a href="addOrUpdateInstitution.php">Add New Institute</a>
         </div>
       </div>
       <div class="dropdown">
