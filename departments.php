@@ -1,6 +1,35 @@
 <!DOCTYPE html>
 <?php
-// session_start();
+include('department.class.php'); // Include the class file
+
+$department = new Department(); // Create an instance of the class
+$departments = $department->getAllDepartments(); // Fetch all departments
+
+// Function to handle empty values
+function displayValue($value)
+{
+    return !empty($value) ? htmlspecialchars($value) : 'Empty';
+}
+
+// Define table columns
+$fields = [
+    'institution_name' => 'Institution Name',
+    'department_name' => 'Department Name',
+    'department_code' => 'Code',
+    'description' => 'Description'
+];
+
+// Handle delete request
+if (isset($_GET['delete_id'])) {
+    $depId = $_GET['delete_id'];
+
+    if ($depId->deleteDepartment($depId)) {
+        echo "<script>alert('department deleted successfully!'); window.location='departments.php';</script>";
+    } else {
+        echo "<script>alert('Failed to delete department.');</script>";
+    }
+}
+
 ?>
 <html>
 
@@ -140,27 +169,7 @@
     <div class="bottom">
         <h4>All Departments</h4>
         <hr>
-        <?php
-        echo "<h2>List of All Departments</h2>";
-        include('department.class.php'); // Include the class file
-
-        $department = new Department(); // Create an instance of the class
-        $departments = $department->getAllDepartments(); // Fetch all departments
-
-        // Function to handle empty values
-        function displayValue($value)
-        {
-            return !empty($value) ? htmlspecialchars($value) : 'Empty';
-        }
-
-        // Define table columns
-        $fields = [
-            'institution_name' => 'Institution Name',
-            'department_name' => 'Department Name',
-            'department_code' => 'Code',
-            'description' => 'Description'
-        ];
-        ?>
+        <h2>List of All Departments</h2>
 
         <table id="customers" border="1" cellspacing="0" cellpadding="10">
             <tr>
@@ -178,7 +187,7 @@
                         <?php endforeach; ?>
                         <td>
                             <a href="addOrUpdateDepartment.php?id=<?= $row['id'] ?>" style="color: blue; text-decoration: none;">Edit</a> |
-                            <a href="delete_department.php?id=<?= $row['id'] ?>" style="color: red; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this department?');">Delete</a>
+                            <a href="department.php?id=<?= $row['id'] ?>" style="color: red; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this department?');">Delete</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
