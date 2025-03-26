@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <?php
-// session_start();
+include("subject.class.php");
+$subject = new Subject();
+
+if (isset($_GET['delete_id'])) {
+    $subjectId = $_GET['delete_id'];
+    if ($subject->deleteSubject($subjectId)) {
+        echo "<script>alert('Subject deleted successfully!'); window.location='allSubjects.php';</script>";
+    } else {
+        echo "<script>alert('Failed to delete subject.');</script>";
+    }
+}
+$subjects = $subject->getAllSubjects();
 ?>
 <html>
 
@@ -140,61 +151,31 @@
     <div class="bottom">
         <h4>All Subjects</h4>
         <hr>
-        <?php
-        echo "<h2>List of All Subjects</h2>";
-        include('connection.php');
-
-        // Fetch subjects with institution & department names
-        $result = mysqli_query(
-            $conn,
-            "SELECT s.id, s.name AS subject_name, s.subject_code, 
-                i.name AS institution_name, d.name AS department_name, 
-                u.first_name AS created_by
-         FROM subjects s
-         JOIN institutions i ON s.institution_id = i.id
-         JOIN departments d ON s.department_id = d.id
-         LEFT JOIN users u ON s.created_by = u.id"
-        );
-
-        if (!$result) {
-            die("Query failed: " . mysqli_error($conn));
-        }
-
-        // Function to handle empty values
-        function displayValue($value)
-        {
-            return !empty($value) ? htmlspecialchars($value) : 'Empty';
-        }
-
-        // Define table columns
-        $fields = [
-            'institution_name' => 'Institution Name',
-            'department_name' => 'Department Name',
-            'subject_name' => 'Subject Name',
-            'subject_code' => 'Subject Code',
-            'created_by' => 'Created By'
-        ];
-        ?>
+        <h2>List of All Subjects</h2>
 
         <table id="customers" border="1" cellspacing="0" cellpadding="10">
             <tr>
-                <?php foreach ($fields as $field => $label) : ?>
-                    <th><?= $label ?></th>
-                <?php endforeach; ?>
+                <th>Institution Name</th>
+                <th>Department Name</th>
+                <th>Subject Name</th>
+                <th>Subject Code</th>
+                <th>Created By</th>
                 <th>Actions</th>
             </tr>
 
-            <?php while ($row = mysqli_fetch_assoc($result)) : ?>
+            <?php foreach ($subjects as $row) : ?>
                 <tr>
-                    <?php foreach ($fields as $field => $label) : ?>
-                        <td><?= displayValue($row[$field]) ?></td>
-                    <?php endforeach; ?>
+                    <td><?= htmlspecialchars($row['institution_name']) ?></td>
+                    <td><?= htmlspecialchars($row['department_name']) ?></td>
+                    <td><?= htmlspecialchars($row['subject_name']) ?></td>
+                    <td><?= htmlspecialchars($row['subject_code']) ?></td>
+                    <td><?= htmlspecialchars($row['created_by']) ?></td>
                     <td>
-                        <a href="subject.php?id=<?= $row['id'] ?>" style="color: blue; text-decoration: none;">Edit</a> |
-                        <a href="delete_subject.php?id=<?= $row['id'] ?>" style="color: red; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this subject?');">Delete</a>
+                        <a href="subject.php?id=<?= $row['id'] ?>" style="color: blue;">Edit</a> |
+                        <a href="allSubjects.php?delete_id=<?= $row['id'] ?>" style="color: red;" onclick="return confirm('Are you sure you want to delete this subject?');">Delete</a>
                     </td>
                 </tr>
-            <?php endwhile; ?>
+            <?php endforeach; ?>
         </table>
     </div>
 
