@@ -6,7 +6,7 @@
 
 <head>
     <title>Subjects page</title>
-    <link rel="stylesheet" href="1.css" type="text/css">
+    <!-- <link rel="stylesheet" href="1.css" type="text/css"> -->
 
     <script src="jquery-2.0.3.js">
 
@@ -190,7 +190,7 @@
                         <td><?= displayValue($row[$field]) ?></td>
                     <?php endforeach; ?>
                     <td>
-                        <a href="edit_subject.php?id=<?= $row['id'] ?>" style="color: blue; text-decoration: none;">Edit</a> |
+                        <a href="subject.php?id=<?= $row['id'] ?>" style="color: blue; text-decoration: none;">Edit</a> |
                         <a href="delete_subject.php?id=<?= $row['id'] ?>" style="color: red; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this subject?');">Delete</a>
                     </td>
                 </tr>

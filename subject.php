@@ -1,12 +1,71 @@
 <?php
 include('header.php');
-include('connection.php');
+include('subject.class.php');
+include('institutions.class.php');
+include('department.class.php');
+
+$subject = new Subject();
+$institution = new Institution();
+$department = new Department();
+
+$editMode = false;
+$subjectData = [
+    "institution_id" => "",
+    "department_id" => "",
+    "name" => "",
+    "subject_code" => "",
+    "created_by" => ""
+];
+
+// Fetch institutions
+$institutions = $institution->getAllInstitutions();
+
+// Check if editing an existing subject
+if (isset($_GET['id'])) {
+    $editMode = true;
+    $subjectId = $_GET['id'];
+    $existingSubject = $subject->getSubjectById($subjectId);
+
+    if (!$existingSubject) {
+        die("<script>alert('Subject not found!'); window.location='subjects.php';</script>");
+    }
+
+    $subjectData = $existingSubject;
+}
+
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $data = [
+        "institution_id" => $_POST["institution_id"],
+        "department_id" => $_POST["department_id"],
+        "name" => $_POST["name"],
+        "subject_code" => $_POST["subject_code"],
+        "created_by" => 1 // Change to actual logged-in user ID
+    ];
+
+    if ($editMode) {
+        if ($subject->updateSubject($subjectId, $data)) {
+            echo "<script>alert('Subject updated successfully!'); window.location='allSubjects.php';</script>";
+        } else {
+            echo "<script>alert('Failed to update subject.');</script>";
+        }
+    } else {
+        if ($subject->addSubject($data)) {
+            echo "<script>alert('Subject added successfully!'); window.location='allSubjects.php';</script>";
+        } else {
+            echo "<script>alert('Failed to add subject.');</script>";
+        }
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>Register user</title>
+    <title><?= $editMode ? "Edit" : "Add" ?> Subject</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <style type="text/css">
         .bottom {
@@ -187,21 +246,27 @@ include('connection.php');
 
 <body>
     <div class="bottom">
-        <h1>Subject</h1>
+        <h1><?= $editMode ? "Edit" : "Add" ?> Subject</h1>
         <div class="box">
-            <form name="subject" action="subjectScript.php" method="post" class="form">
-                <select name="insId">
-                    <option value="">Select instituion</option>
-                    <option value="1">A</option>
-                    <option value="2">B</option>
-                    <option value="3">C</option>
+            <form name="subject" method="post" class="form">
+                <select name="institution_id" id="institution_id" required>
+                    <option value="">Select Institution</option>
+                    <?php foreach ($institutions as $inst) : ?>
+                        <option value="<?= $inst['id'] ?>" <?= ($inst['id'] == $subjectData['institution_id']) ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($inst['name']) ?>
+                        </option>
+                    <?php endforeach; ?>
                 </select><br>
-                <input type="text" name="subName" placeholder="name"><br>
-                <input type="text" name="sunCode" placeholder="subject code"><br>
-                <input type="text" name="depId" placeholder="department"><br>
-                <input type="password" name="sumSem" placeholder="semester"><br>
+                <!-- Department Dropdown (Populated via AJAX) -->
+                <select name="department_id" id="department_id" required>
+                    <option value="">Select Department</option>
+                </select><br>
+
+                <input type="text" name="name" placeholder="Subject Name" value="<?= htmlspecialchars($subjectData['name']) ?>" required><br>
+                <input type="text" name="subject_code" placeholder="Subject Code" value="<?= htmlspecialchars($subjectData['subject_code']) ?>"><br>
+
                 <div class="buttons">
-                    <input id="submit" type="submit" value="Submit" />
+                    <input id="submit" type="submit" value="<?= $editMode ? "Update" : "Submit" ?>" />
                     <input id="reset" type="reset" value="Reset" />
                 </div>
             </form>
@@ -211,6 +276,45 @@ include('connection.php');
     <div class="foot">
         Made With <img src="Vector.svg"> By CSE Techies Of KIET-W
     </div>
+
+    <script>
+        $(document).ready(function() {
+            function loadDepartments(institutionId, selectedDepartment = '') {
+                if (institutionId) {
+                    $.ajax({
+                        url: "subject.class.php",
+                        type: "GET",
+                        data: {
+                            institution_id: institutionId
+                        },
+                        dataType: "json",
+                        success: function(departments) {
+                            let departmentSelect = $("#department_id");
+                            departmentSelect.empty().append('<option value="">Select Department</option>');
+
+                            $.each(departments, function(index, department) {
+                                let selected = (department.id == selectedDepartment) ? 'selected' : '';
+                                departmentSelect.append(`<option value="${department.id}" ${selected}>${department.name}</option>`);
+                            });
+                        }
+                    });
+                } else {
+                    $("#department_id").empty().append('<option value="">Select Department</option>');
+                }
+            }
+
+            // Load departments when institution is selected
+            $("#institution_id").change(function() {
+                let institutionId = $(this).val();
+                loadDepartments(institutionId);
+            });
+
+            // If editing, pre-load departments
+            <?php if ($editMode && !empty($subjectData['institution_id'])) : ?>
+                loadDepartments(<?= $subjectData['institution_id'] ?>, <?= $subjectData['department_id'] ?>);
+            <?php endif; ?>
+        });
+    </script>
 </body>
 
 </html>
