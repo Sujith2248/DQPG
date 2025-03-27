@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <?php
-// session_start();
+include('header.php');
+include('questions.class.php');
+
+$question = new Question();
+$questions = $question->getAllQuestions();
 ?>
 <html>
 
@@ -11,6 +15,7 @@
     <script src="jquery-2.0.3.js">
 
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         .dropdown {
             position: relative;
@@ -135,62 +140,40 @@
 <body>
     <?php
 
-    include('header.php');
     ?>
     <div class="bottom">
         <h4>All Questions</h4>
         <hr>
-        <?php
-        echo "<h2>List of All Questions</h2>";
-        include('connection.php');
+        <h2>List of All Questions</h2>
 
-        // Fetch questions with subject name
-        $result = mysqli_query(
-            $conn,
-            "SELECT q.id, q.question_text, q.marks, q.difficulty_level, 
-                s.name AS subject_name 
-         FROM questions q
-         JOIN subjects s ON q.subject_id = s.id"
-        );
-
-        if (!$result) {
-            die("Query failed: " . mysqli_error($conn));
-        }
-
-        // Function to handle empty values
-        function displayValue($value)
-        {
-            return !empty($value) ? htmlspecialchars($value) : 'Empty';
-        }
-
-        // Define table columns
-        $fields = [
-            'subject_name' => 'Subject Name',
-            'question_text' => 'Question',
-            'marks' => 'Marks',
-            'difficulty_level' => 'Difficulty Level'
-        ];
-        ?>
-
-        <table id="customers" border="1" cellspacing="0" cellpadding="10">
+        <table id="customers">
             <tr>
-                <?php foreach ($fields as $field => $label) : ?>
-                    <th><?= $label ?></th>
-                <?php endforeach; ?>
+                <th>Institution</th>
+                <th>Department</th>
+                <th>Subject</th>
+                <th>Semester</th>
+                <th>Question</th>
+                <th>Marks</th>
+                <th>Difficulty</th>
                 <th>Actions</th>
             </tr>
 
-            <?php while ($row = mysqli_fetch_assoc($result)) : ?>
-                <tr>
-                    <?php foreach ($fields as $field => $label) : ?>
-                        <td><?= displayValue($row[$field]) ?></td>
-                    <?php endforeach; ?>
+            <?php foreach ($questions as $row) : ?>
+                <tr id="row-<?= $row['id'] ?>">
+                    <td><?= htmlspecialchars($row['institution_name']) ?></td>
+                    <td><?= htmlspecialchars($row['department_name']) ?></td>
+                    <td><?= htmlspecialchars($row['subject_name']) ?></td>
+                    <td><?= htmlspecialchars($row['semester']) ?></td>
+                    <td><?= htmlspecialchars($row['question_text']) ?></td>
+                    <td><?= htmlspecialchars($row['marks']) ?></td>
+                    <td><?= htmlspecialchars($row['difficulty_level']) ?></td>
                     <td>
-                        <a href="edit_question.php?id=<?= $row['id'] ?>" style="color: blue; text-decoration: none;">Edit</a> |
-                        <a href="delete_question.php?id=<?= $row['id'] ?>" style="color: red; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this question?');">Delete</a>
+                        <a href="question.php?id=<?= $row['id'] ?>" class="action-btn edit-btn">Edit</a> |
+                        <a href="#" class="action-btn delete-btn" data-id="<?= $row['id'] ?>">Delete</a>
                     </td>
                 </tr>
-            <?php endwhile; ?>
+            <?php endforeach; ?>
+
         </table>
     </div>
 
@@ -201,7 +184,30 @@
     <div class="foot">
         Made With <img src="Vector.svg"> By CSE Techies Of KIET-W
     </div>
+    <script>
+        $(document).ready(function() {
+            $(".delete-btn").click(function() {
+                let questionId = $(this).data("id");
 
+                if (confirm("Are you sure you want to delete this question?")) {
+                    $.ajax({
+                        url: "questions.class.php",
+                        type: "POST",
+                        data: {
+                            delete_id: questionId
+                        },
+                        success: function(response) {
+                            if (response.trim() === "success") {
+                                $("#row-" + questionId).fadeOut(500);
+                            } else {
+                                alert("Failed to delete question.");
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

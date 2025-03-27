@@ -64,13 +64,18 @@ CREATE TABLE IF NOT EXISTS subjects (
 -- Create questions table
 CREATE TABLE IF NOT EXISTS questions (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    institution_id INT NOT NULL,
+    department_id INT NOT NULL,
+    semester INT,
     subject_id INT NOT NULL,
     question_text TEXT NOT NULL,
     marks INT NOT NULL,
-    difficulty_level ENUM('hard', 'medium', 'easy') NOT NULL,
+    difficulty_level ENUM('long_descriptive', 'short_descriptive', 'oneword') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
+    FOREIGN KEY (institution_id) REFERENCES institutions(id) ON DELETE CASCADE,
+    FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE,
+    FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE,
 );
 
 
