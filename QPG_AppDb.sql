@@ -78,6 +78,37 @@ CREATE TABLE IF NOT EXISTS questions (
     FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE,
 );
 
+CREATE TABLE IF NOT EXISTS question_papers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    institution_id INT NOT NULL,
+    department_id INT NOT NULL,
+    subject_id INT NOT NULL,
+    semester INT NOT NULL,
+    exam_name VARCHAR(255) NOT NULL,
+    exam_code VARCHAR(100) NOT NULL,
+    academic_year YEAR NOT NULL,
+    created_by INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (institution_id) REFERENCES institutions(id) ON DELETE CASCADE,
+    FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE,
+    FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE,
+    FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS question_paper_questions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    paper_id INT NOT NULL,
+    question_id INT NOT NULL,
+    section_name VARCHAR(100) NOT NULL, -- e.g., 'Section A', 'One Word Questions'
+    question_order INT NOT NULL,        -- order inside that section
+    marks INT NOT NULL,                 -- marks for this question in this paper
+
+    FOREIGN KEY (paper_id) REFERENCES question_papers(id) ON DELETE CASCADE,
+    FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
+);
+
 
 -- Insert sample data into institutions
 INSERT INTO institutions (public_id, name, address, contact_number) VALUES

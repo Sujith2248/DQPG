@@ -137,6 +137,13 @@
           <a href="question.php">Add new question</a>
         </div>
       </div>
+      <div class="dropdown">
+        <button class="dropbtn">Generate Paper</button>
+        <div class="dropdown-content" style="left:0;">
+          <a href="allQuestions.php">View all Papers</a>
+          <a href="createPaper.php">Create new paper</a>
+        </div>
+      </div>
     </div>
     <hr>
   </div>
