@@ -63,6 +63,49 @@ $subjects = ($editMode) ? $question->getSubjectsByDepartmentId($questionData["de
     <title><?= $editMode ? "Edit" : "Add" ?> Question paper</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style type="text/css">
+        .question-input {
+            width: 70%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: none;
+            border-bottom: 2px solid rgb(26, 83, 93);
+            background: transparent;
+        }
+
+        .accordion {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: left;
+            background-color: #f9f9f9;
+        }
+
+        .accordion h2 {
+            font-size: 18px;
+            padding: 10px 20px;
+            background-color: rgb(31, 104, 117);
+            color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            cursor: pointer;
+        }
+
+        .accordion .accordion-body {
+            padding: 15px 20px;
+        }
+
+        .accordion input[type="number"],
+        .accordion select {
+            width: 70%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: none;
+            border-bottom: 2px solid rgb(26, 83, 93);
+            background: transparent;
+        }
+
         .bottom {
             position: inherit;
             background-color: rgb(31, 104, 117);
@@ -196,8 +239,6 @@ $subjects = ($editMode) ? $question->getSubjectsByDepartmentId($questionData["de
 
 
                 <div class="buttons">
-
-
                     <button type="submit" id="submit">Generate</button>
                     <button type="reset" id="reset">Reset</button>
                 </div>
@@ -268,10 +309,10 @@ $subjects = ($editMode) ? $question->getSubjectsByDepartmentId($questionData["de
                             </h2>
                             <div id="collapse${i}" class="accordion-collapse collapse show">
                                 <div class="accordion-body">
-                                    <label>Number of Questions</label>
-                                    <input type="number" class="form-control question-count" data-section="${i}" min="1">
-                                    <label>Question Selection</label>
-                                    <select class="form-select question-method" data-section="${i}">
+                                    
+                                    <input type="number" placeholder="Number of Questions" class="form-control question-count" data-section="${i}" min="1">
+                                  
+                                    <select class="form-select question-method" placeholder="Question Selection" data-section="${i}">
                                         <option value="manual">Manual</option>
                                         <option value="random">Random</option>
                                     </select>
@@ -303,11 +344,11 @@ $subjects = ($editMode) ? $question->getSubjectsByDepartmentId($questionData["de
                 // Generate new input fields
                 for (let i = 1; i <= questionCount; i++) {
                     questionContainer.append(`
-                        <div class="mb-2">
-                            <label>Question ${i}</label>
-                            <input type="text" name="section${sectionNumber}_question${i}" class="form-control" required>
-                        </div>
-                    `);
+    <div class="mb-2">
+        <label style="display: block; margin: 8px 0;">Question ${i}</label>
+        <input type="text" name="section${sectionNumber}_question${i}" class="question-input" required>
+    </div>
+`);
                 }
 
                 // Show manual selection div if there are questions
