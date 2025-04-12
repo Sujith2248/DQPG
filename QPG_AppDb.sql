@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS question_papers (
     FOREIGN KEY (institution_id) REFERENCES institutions(id) ON DELETE CASCADE,
     FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE,
     FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE,
-    FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
+    FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS question_paper_questions (
@@ -109,17 +109,4 @@ CREATE TABLE IF NOT EXISTS question_paper_questions (
     FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
 );
 
-
--- Insert sample data into institutions
-INSERT INTO institutions (public_id, name, address, contact_number) VALUES
-(UUID(), 'Global Institution', '123 Main St, City, Country', '1234567890'),
-(UUID(), 'Tech Academy', '456 Tech Ave, City, Country', '9876543210'),
-(UUID(), 'Science College', '789 Science Rd, City, Country', '5555555555');
-
-
--- Insert sample data into departments
-INSERT INTO departments (public_id, institution_id, name, department_code, description) VALUES
-(UUID(), 2, 'Computer Science', 'CS101', 'Department of Computer Science'),
-(UUID(), 2, 'Mathematics', 'MATH102', 'Department of Mathematics'),
-(UUID(), 3, 'Physics', 'PHYS103', 'Department of Physics');
 

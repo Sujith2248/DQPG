@@ -64,11 +64,12 @@ session_start();
 <body>
 
 <?php
-$institution = "THUNCHATH EZHUTHACHAN COLLEGE, ELAVANCHERY";
-$examName = "THIRD SEMESTER M.Sc. COMPUTER SCIENCE MODEL EXAMINATION NOV 2024";
-$subject = "CSS 3C 11 - ADVANCED DATABASE MANAGEMENT SYSTEM";
-$time = "2 Hours";
-$maxMarks = 50;
+$institution = $_POST['institution'];
+$examName = $_POST['semester'] + " " + $_POST['department'] + " " + $_POST['examName'];
+$subject = $_POST['subject'];
+$time = $_POST['date'] + "|" + $_POST['time'];
+$maxMarks = $_POST['totmarks'];
+$noOfSections = $_POST['noofsections'] ?? 0;
 $questions = [
     "PART A" => [
         "List the ACID properties of a transaction.",

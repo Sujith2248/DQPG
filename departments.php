@@ -22,8 +22,7 @@ $fields = [
 // Handle delete request
 if (isset($_GET['delete_id'])) {
     $depId = $_GET['delete_id'];
-
-    if ($depId->deleteDepartment($depId)) {
+    if ($department->deleteDepartment($depId)) {
         echo "<script>alert('department deleted successfully!'); window.location='departments.php';</script>";
     } else {
         echo "<script>alert('Failed to delete department.');</script>";
@@ -187,7 +186,7 @@ if (isset($_GET['delete_id'])) {
                         <?php endforeach; ?>
                         <td>
                             <a href="addOrUpdateDepartment.php?id=<?= $row['id'] ?>" style="color: blue; text-decoration: none;">Edit</a> |
-                            <a href="department.php?id=<?= $row['id'] ?>" style="color: red; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this department?');">Delete</a>
+                            <a href="departments.php?delete_id=<?= $row['id'] ?>" style="color: red; text-decoration: none;" onclick="return confirm('Are you sure you want to delete this department?');">Delete</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

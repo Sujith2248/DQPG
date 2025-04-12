@@ -5,7 +5,7 @@ session_start();
 <html>
 
 <head>
-    <title>Question paper generator</title>
+    <title>Question paper generator</title>  
     <!-- <link type="text/css" rel="stylesheet" href="StyleSheet1.css" /> -->
     <style>
         #head {

@@ -23,7 +23,7 @@ if ($deptId) {
     if ($departmentInfo) {
         $departmentData = array_merge($departmentData, $departmentInfo);
     } else {
-        die("<script>alert('Department not found!'); window.location='register_department.php';</script>");
+        die("<script>alert('Department not found!'); window.location='departments.php';</script>");
     }
 }
 
@@ -38,13 +38,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($editMode) {
         if ($department->updateDepartment($deptId, $data)) {
-            echo "<script>alert('Department updated successfully!'); window.location='register_department.php';</script>";
+            echo "<script>alert('Department updated successfully!'); window.location='departments.php';</script>";
         } else {
             echo "<script>alert('Failed to update department.');</script>";
         }
     } else {
         if ($department->addDepartment($data)) {
-            echo "<script>alert('Department added successfully!'); window.location='register_department.php';</script>";
+            echo "<script>alert('Department added successfully!'); window.location='departments.php';</script>";
         } else {
             echo "<script>alert('Failed to add department.');</script>";
         }

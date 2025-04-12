@@ -57,8 +57,7 @@ class Department
     {
         $sql = "DELETE FROM departments WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $id);
-        return $stmt->execute();
+        return $stmt->execute([$id]);
     }
     // Fetch institutions for dropdown
     public function getInstitutions()
