@@ -109,4 +109,3 @@ CREATE TABLE IF NOT EXISTS question_paper_questions (
     FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
 );
 
-
