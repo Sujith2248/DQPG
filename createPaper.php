@@ -220,14 +220,13 @@ $subjects = ($editMode) ? $question->getSubjectsByDepartmentId($questionData["de
                 <br>
 
                 <!-- Semester Dropdown -->
-
-                <select id="semester" name="semester" required>
-                    <?php if ($editMode && !empty($questionData['semester'])) : ?>
-                        <option value="<?= $questionData['semester'] ?>" selected>Semester <?= $questionData['semester'] ?></option>
-                    <?php else : ?>
-                        <option value="">Select Semester</option>
-                    <?php endif; ?>
-                </select>
+                <input
+                    type="text"
+                    id="semester"
+                    name="semester"
+                    required
+                    value="<?= $editMode && !empty($questionData['semester']) ? $questionData['semester'] : '' ?>"
+                    placeholder="Enter Semester (e.g., 1, 2, 3...)" />
                 <br>
 
                 <input type="text" id="examName" name="examName" placeholder="Enter Exam name" required><br>
@@ -276,20 +275,7 @@ $subjects = ($editMode) ? $question->getSubjectsByDepartmentId($questionData["de
                 }, "json");
             });
 
-            $('#subject').change(function() {
-                const selectedSubject = $(this).val();
-                console.log("selectedSubject-->", selectedSubject)
 
-                $.get("createPaper.class.php", {
-                    semester_id: selectedSubject
-                }, function(data) {
-                    console.log(data)
-                    $("#semester").html('<option value="">Select Semester</option>');
-                    $.each(data, function(index, semester) {
-                        $("#semester").append(`<option value="${semester.id}">${semester.name}</option>`);
-                    });
-                }, "json");
-            });
         });
     </script>
 
