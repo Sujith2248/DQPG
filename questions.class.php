@@ -14,17 +14,16 @@ class Question
     // Add Question
     public function addQuestion($data)
     {
-
         $sql = "INSERT INTO questions (institution_id, department_id, semester, subject_id, question_text, marks, difficulty_level) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param(
-            "iiiisis",  // i = integer, s = string
+            "iiisiss",  // i = integer, s = string
             $data['institution_id'],
             $data['department_id'],
             $data['semester'],
             $data['subject_id'],
-            $data['question_text'],  // Ensure this is a valid string
+            $data['question_text'],
             $data['marks'],
             $data['difficulty_level']
         );
@@ -69,7 +68,7 @@ class Question
                 question_text = ?, marks = ?, difficulty_level = ? WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param(
-            "iiiisisi",
+            "iiisissi",
             $data['institution_id'],
             $data['department_id'],
             $data['semester'],
@@ -99,6 +98,17 @@ class Question
         return ($result->num_rows > 0) ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
+    // Fetch Institution by ID
+    public function getInstitutionById($id)
+    {
+        $sql = "SELECT id, name FROM institutions WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return ($result->num_rows > 0) ? $result->fetch_assoc() : ['id' => 0, 'name' => 'Unknown Institution'];
+    }
+
     // Fetch Departments by Institution
     public function getDepartmentsByInstitutionId($institutionId)
     {
@@ -108,6 +118,17 @@ class Question
         $stmt->execute();
         $result = $stmt->get_result();
         return ($result->num_rows > 0) ? $result->fetch_all(MYSQLI_ASSOC) : [];
+    }
+
+    // Fetch Department by ID
+    public function getDepartmentById($id)
+    {
+        $sql = "SELECT id, name FROM departments WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return ($result->num_rows > 0) ? $result->fetch_assoc() : ['id' => 0, 'name' => 'Unknown Department'];
     }
 
     // Fetch Subjects by Department
@@ -120,17 +141,33 @@ class Question
         $result = $stmt->get_result();
         return ($result->num_rows > 0) ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
+
+    // Fetch Subject by ID
+    public function getSubjectById($id)
+    {
+        $sql = "SELECT id, name FROM subjects WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return ($result->num_rows > 0) ? $result->fetch_assoc() : ['id' => 0, 'name' => 'Unknown Subject'];
+    }
 }
 
 // Handle AJAX Request for Departments & Subjects
 if (isset($_GET['institution_id'])) {
     $question = new Question();
-    echo json_encode($question->getDepartmentsByInstitutionId($_GET['institution_id']));
+    $departments = $question->getDepartmentsByInstitutionId($_GET['institution_id']);
+    header('Content-Type: application/json');
+    echo json_encode($departments);
     exit;
 }
 
 if (isset($_GET['department_id'])) {
     $question = new Question();
-    echo json_encode($question->getSubjectsByDepartmentId($_GET['department_id']));
+    $subjects = $question->getSubjectsByDepartmentId($_GET['department_id']);
+    header('Content-Type: application/json');
+    echo json_encode($subjects);
     exit;
 }
+?>

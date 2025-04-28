@@ -109,7 +109,7 @@ $subjects = ($editMode) ? $question->getSubjectsByDepartmentId($questionData["de
         .bottom {
             position: inherit;
             background-color: rgb(31, 104, 117);
-            color: white;
+            /* color: white; */
             padding: 20px;
             padding-left: 60px;
             margin: 10px 0px 0px 0px;
@@ -181,7 +181,7 @@ $subjects = ($editMode) ? $question->getSubjectsByDepartmentId($questionData["de
     <div class="bottom">
         <h1><?= $editMode ? "Edit" : "Add" ?> question paper</h1>
         <div class="box">
-            <form name="register" method="post">
+        <form id="questionPaperForm" name="login" action="questionPaperTemplate.php" method="post" class="form">
 
                 <!-- Institution Dropdown -->
 
