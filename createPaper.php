@@ -58,10 +58,13 @@ $subjects = ($editMode) ? $question->getSubjectsByDepartmentId($questionData["de
 ?>
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title><?= $editMode ? "Edit" : "Add" ?> Question paper</title>
+    <title><?= $editMode ? "Edit" : "Add" ?> Question Paper</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <style type="text/css">
         .question-input {
             width: 70%;
@@ -109,7 +112,6 @@ $subjects = ($editMode) ? $question->getSubjectsByDepartmentId($questionData["de
         .bottom {
             position: inherit;
             background-color: rgb(31, 104, 117);
-            /* color: white; */
             padding: 20px;
             padding-left: 60px;
             margin: 10px 0px 0px 0px;
@@ -176,15 +178,12 @@ $subjects = ($editMode) ? $question->getSubjectsByDepartmentId($questionData["de
         }
     </style>
 </head>
-
 <body>
     <div class="bottom">
         <h1><?= $editMode ? "Edit" : "Add" ?> question paper</h1>
         <div class="box">
-        <form id="questionPaperForm" name="login" action="questionPaperTemplate.php" method="post" class="form">
-
+            <form id="questionPaperForm" name="login" action="questionPaperTemplate.php" method="post" class="form">
                 <!-- Institution Dropdown -->
-
                 <select name="institution" id="institution" required>
                     <option value="">Select Institution</option>
                     <?php foreach ($institutions as $inst) : ?>
@@ -204,11 +203,9 @@ $subjects = ($editMode) ? $question->getSubjectsByDepartmentId($questionData["de
                         </option>
                     <?php endforeach; ?>
                 </select>
-
                 <br>
 
                 <!-- Subject Dropdown -->
-
                 <select name="subject" id="subject" required>
                     <option value="">Select Subject</option>
                     <?php foreach ($subjects as $sub) : ?>
@@ -229,13 +226,12 @@ $subjects = ($editMode) ? $question->getSubjectsByDepartmentId($questionData["de
                     placeholder="Enter Semester (e.g., 1, 2, 3...)" />
                 <br>
 
-                <input type="text" id="examName" name="examName" placeholder="Enter Exam name" required><br>
-                <input type="text" name="time" id="time" placeholder="Enter Exam Time" required><br>
-                <input type="text" name="date" id="date" placeholder="Enter Exam Year" required><br>
-                <input type="text" name="totmarks" id="totmarks" placeholder="Enter Total mark" required><br>
-                <input type="text" name="noofsections" id="noofsections" placeholder="Enter number of sections" required><br>
+                <input type="text" id="examName" name="examName" placeholder="Enter Exam Name" required><br>
+                <input type="text" name="time" id="time" placeholder="Enter Exam Time (e.g., 2)" required><br>
+                <input type="text" name="date" id="date" placeholder="Select Exam Date (e.g., Feb 2025)" required><br>
+                <input type="text" name="totmarks" id="totmarks" placeholder="Enter Total Marks" required><br>
+                <input type="text" name="noofsections" id="noofsections" placeholder="Enter Number of Sections" required><br>
                 <div id="sectionsContainer"></div>
-
 
                 <div class="buttons">
                     <button type="submit" id="submit">Generate</button>
@@ -251,6 +247,19 @@ $subjects = ($editMode) ? $question->getSubjectsByDepartmentId($questionData["de
 
     <script>
         $(document).ready(function() {
+            // Initialize jQuery UI Datepicker
+            $("#date").datepicker({
+                dateFormat: "yy-mm",
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                onClose: function(dateText, inst) {
+                    var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                    $(this).datepicker('setDate', new Date(year, month, 1));
+                }
+            });
+
             $("#institution").change(function() {
                 let institutionId = $(this).val();
                 $.get("questions.class.php", {
@@ -275,12 +284,6 @@ $subjects = ($editMode) ? $question->getSubjectsByDepartmentId($questionData["de
                 }, "json");
             });
 
-
-        });
-    </script>
-
-    <script>
-        $(document).ready(function() {
             $('#noofsections').change(function() {
                 let sectionCount = $(this).val();
                 let sectionHtml = '';
@@ -295,9 +298,7 @@ $subjects = ($editMode) ? $question->getSubjectsByDepartmentId($questionData["de
                             </h2>
                             <div id="collapse${i}" class="accordion-collapse collapse show">
                                 <div class="accordion-body">
-                                    
                                     <input type="number" placeholder="Number of Questions" class="form-control question-count" data-section="${i}" min="1">
-                                  
                                     <select class="form-select question-method" placeholder="Question Selection" data-section="${i}">
                                         <option value="manual">Manual</option>
                                         <option value="random">Random</option>
@@ -330,11 +331,11 @@ $subjects = ($editMode) ? $question->getSubjectsByDepartmentId($questionData["de
                 // Generate new input fields
                 for (let i = 1; i <= questionCount; i++) {
                     questionContainer.append(`
-    <div class="mb-2">
-        <label style="display: block; margin: 8px 0;">Question ${i}</label>
-        <input type="text" name="section${sectionNumber}_question${i}" class="question-input" required>
-    </div>
-`);
+                        <div class="mb-2">
+                            <label style="display: block; margin: 8px 0;">Question ${i}</label>
+                            <input type="text" name="section${sectionNumber}_question${i}" class="question-input" required>
+                        </div>
+                    `);
                 }
 
                 // Show manual selection div if there are questions
@@ -356,15 +357,15 @@ $subjects = ($editMode) ? $question->getSubjectsByDepartmentId($questionData["de
             });
 
             // Handle Generate button
-            $('#generateBtn').click(function() {
+            $('#submit').click(function(e) {
                 if ($('#questionPaperForm')[0].checkValidity()) {
-                    alert('Form is valid! Generating question paper...');
+                    // Form is valid, proceed with submission
                 } else {
+                    e.preventDefault();
                     alert('Please fill out all required fields.');
                 }
             });
         });
     </script>
 </body>
-
 </html>
